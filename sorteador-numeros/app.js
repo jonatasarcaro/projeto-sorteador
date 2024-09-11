@@ -1,26 +1,48 @@
-function sortear(){
-  let quantidade = parseInt(document.getElementById('quantidade').value); // criado uma função "sortear" para e declara uma variavel e puxa seu id do input quantidade
-  let de = parseInt(document.getElementById('de').value) // declarado variavel do input
-  let ate = parseInt(document.getElementById('ate').value); // declarado variavel do input / parseInt é para declarar que sera apenas números dentro do input
+function sortear() {
+  let quantidade = parseInt(document.getElementById('quantidade').value); // capturar a quantidade de números a serem sorteados
+  let de = parseInt(document.getElementById('de').value); // capturar o valor mínimo do intervalo
+  let ate = parseInt(document.getElementById('ate').value); // capturar o valor máximo do intervalo
 
-    let sorteados = []; // criado a variavel array para criarmos um repetição para podermos chamar mais de um numero, <-- usado para armazenar
-    let numero;
+  let sorteados = []; // array para armazenar os números sorteados
+  let numero;
 
-    for (let i = 0; i < quantidade; i++) {  // começa por 0, e a variavel i verifica se o numero é menor que a variavel quantidade e incrementa 1 apos a passagem do loop como se fosse i = i + 1}
-      let numero = obterNumeroAleatorio(de, ate); // vou fazer um loop onde numero obtem um numero aleatorio (de, ate)
-      
-      while (sorteados.includes(numero)) {// para não repetir mais os numeros; enquando variavel sorteados ja tem incluido (numero) enquanto for true entra em loop até n ser mais true
+  for (let i = 0; i < quantidade; i++) {  // sorteia 'quantidade' números
+    let numero = obterNumeroAleatorio(de, ate); // obtem um número aleatório entre 'de' e 'ate'
+    
+    while (sorteados.includes(numero)) { // garantir que o número não se repita
       numero = obterNumeroAleatorio(de, ate);
-      }
-      sorteados.push(numero);
     }
+    sorteados.push(numero);
+  }
 
-    let resultado = document.getElementById('resultado'); // vai ler do html o label direto para a seção desejada pego pelo ID, para dar o valor
-    resultado.classList.add('texto__paragrafo'); 
-    resultado.textContent = `Números sorteados: ${sorteados}`;
+  let resultado = document.getElementById('resultado'); // exibir os números sorteados na tela
+  resultado.classList.add('texto__paragrafo'); 
+  resultado.textContent = `Números sorteados: ${sorteados.join(', ')}`;
+
+  habilitarBotaoReiniciar(); // após o sorteio, habilita o botão de reiniciar
 }
 
-function obterNumeroAleatorio(min, max) { // função para gerar um número aleatorio entre o min e o max 
-   return Math.floor(Math.random() * (max - min + 1 )) + min; // vai retornar um numero inteiro, que leva em consideração o minimo e o maximo
+function obterNumeroAleatorio(min, max) { 
+   return Math.floor(Math.random() * (max - min + 1)) + min; // gera um número aleatório entre min e max
 }
 
+function habilitarBotaoReiniciar() {
+  let botao = document.getElementById('btn-reiniciar');
+  botao.classList.remove('container__botao-desabilitado');
+  botao.classList.add('container__botao');
+}
+
+function desabilitarBotaoReiniciar() {
+  let botao = document.getElementById('btn-reiniciar');
+  botao.classList.remove('container__botao');
+  botao.classList.add('container__botao-desabilitado');
+}
+
+function reiniciar() { // limpa os campos e reseta o resultado
+  document.getElementById('quantidade').value = '';
+  document.getElementById('de').value = '';
+  document.getElementById('ate').value = '';
+  document.getElementById('resultado').textContent = 'Números sorteados: Nenhum até agora';
+
+  desabilitarBotaoReiniciar(); // desabilita o botão de reiniciar após limpar
+}
